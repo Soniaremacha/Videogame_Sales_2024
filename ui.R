@@ -148,13 +148,9 @@ ui <- navbarPage("Videogame Sales 2024",
         # Tab 2
         tabPanel("Top publishers",
                  h1("Top 10 publishers por año"),
-                 sidebarLayout(
-                   sidebarPanel(),
-                   
                    mainPanel(
                      imageOutput("publisher_race_chart")
                    )
-                 )  # End sidebarLayout
         ),  # End tabPanel 2
         
         

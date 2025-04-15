@@ -253,50 +253,60 @@ function(input, output, session) {
   # Tab 2: Top publishers
   
   output$publisher_race_chart <- renderImage({
-    outfile <- tempfile(fileext = ".gif")
     
-    # Query with normalization per year
-    top_publishers_data <- data %>%
-      group_by(year, publisher) %>%
-      summarise(count = n(), .groups = "drop") %>%
-      group_by(year) %>%
-      mutate(max_count = max(count)) %>%
-      mutate(normalized_count = count / max_count) %>%
-      arrange(year, desc(count)) %>%
-      mutate(rank = row_number()) %>%
-      filter(rank <= 10)
+    gif_path <- file.path("www", "race_chart.gif")
     
-    # Race chart with normalized bars
-    p <- ggplot(top_publishers_data,
-                aes(x = -rank, y = normalized_count, fill = publisher)) +
-      geom_col(width = 0.8) +
-      coord_flip() +
-      geom_text(aes(label = publisher), hjust = -0.1, size = 5) +
-      geom_text(aes(label = sprintf("%.0f", count)), hjust = 1.1, color = "white", size = 4) + 
-      labs(title = 'Top 10 publishers por año: {closest_state}', 
-           subtitle = "(Tamaño de las barras relativo al top 1)",
-           x = "Número de videojuegos lanzados", y = "Porcentaje de videojuegos lanzados por año relativo al top 1") +
-      theme_minimal() +
-      theme(legend.position = "none",
-            plot.title = element_text(size = 16, face = "bold"),
-            plot.subtitle = element_text(size = 12)) +
-      transition_states(year, transition_length = 3, state_length = 1) +
-      ease_aes("cubic-in-out")
+    # Renderiza si no está el gif en la carpeta www
+    if (!file.exists(gif_path)) {
+      
+      # Query
+      top_publishers_data <- data %>%
+        group_by(year, publisher) %>%
+        summarise(count = n(), .groups = "drop") %>%
+        group_by(year) %>%
+        mutate(max_count = max(count)) %>%
+        mutate(normalized_count = count / max_count * 100) %>%
+        arrange(year, desc(count)) %>%
+        mutate(rank = row_number()) %>%
+        filter(rank <= 10)
+      
+      # Race chart
+      p <- ggplot(top_publishers_data,
+                  aes(x = -rank, y = normalized_count, fill = publisher, group = publisher)) +
+        geom_col(width = 0.8) +
+        coord_flip() +
+        
+        # Etiquetas de publisher y cantidad de videojuegos por año 
+        geom_text(aes(label = publisher), hjust = -0.1, size = 5) +
+        geom_text(aes(label = sprintf("%.0f", count)), hjust = 1.1, color = "white", size = 4) + 
+        
+        # Cambiar ejes
+        scale_x_continuous(breaks = -1:-10, labels = 1:10) +
+        scale_y_continuous(labels = scales::percent_format(scale = 1)) +
+        
+        # Títulos, tema y leyenda
+        labs(title = 'Top 10 publishers por año: {closest_state}', 
+             subtitle = "(Tamaño de las barras relativo al top 1, mostrando la cantidad de videojuegos lanzados en la etiqueta)",
+             x = "", 
+             y = "Porcentaje de videojuegos lanzados por año relativo al top 1") +
+        theme_minimal() +
+        theme(legend.position = "none",
+              plot.title = element_text(size = 16, face = "bold"),
+              plot.subtitle = element_text(size = 12)) +
+        
+        # Movimiento race chart
+        transition_states(year, transition_length = 4, state_length = 1) +
+        ease_aes("cubic-in-out")
+      
+      # Guardar animación en carpeta www
+      animate_plot <- animate(p, width = 800, height = 600, fps = 30, duration = 120)
+      anim_save(gif_path, animation = animate_plot)
+    }
     
-    # Save animation
-    anim_save("race_chart.gif", animation = animate(p, width = 800, height = 600, fps = 12, duration = 120), path = tempdir())
+    # Cargar el gif guardado
+    list(src = gif_path, contentType = 'image/gif')
     
-    list(src = file.path(tempdir(), "race_chart.gif"),
-         contentType = 'image/gif'
-    )
-  }, deleteFile = TRUE)
-  
-  
-  
-  
-    
-  
-                                    
+  }, deleteFile = FALSE)
   
   
   
