@@ -145,7 +145,7 @@ ui <- navbarPage("Videogame Sales 2024",
                  
         ), # End tabPanel 1
         # -------------------------------------------------------------------------------------------------------------------------------------
-        # Tab 2 Top publisher
+        # Tab 2
         tabPanel("Top publishers",
                  h1("Top 10 publishers por año"),
                  sidebarLayout(
