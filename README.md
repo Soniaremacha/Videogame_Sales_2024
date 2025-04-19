@@ -33,19 +33,20 @@ You can explore this data visualization without any installation [here]( https:/
 ## 📁 Project Structure
 
 Videogame_Sales_2024/
-├── server.R                # Shiny app server
 
-├── ui.R                    # Shiny app ui
+├── server.R----------------# Shiny app server
 
-├── www/                    # Gif generated
+├── ui.R--------------------# Shiny app ui
+
+├── www/--------------------# Gif generated
 
 │   └── race_chart.gif      
 
-├── mundo.rds               # File generated from Natural Earth library for the world map
+├── mundo.rds---------------# File generated from Natural Earth library for the world map
 
-├── sales_map.png           # Image generated
+├── sales_map.png-----------# Image generated
 
-└── README.md               # This file
+└── README.md---------------# This file
 
 
 ## 📊 Dataset
