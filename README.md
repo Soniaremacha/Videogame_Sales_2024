@@ -1,4 +1,4 @@
-# 🎮 Videogame Sales 2024 - Shiny Dashboard
+# 🎮 Videogame Sales 2024 - Shiny R
 
 An interactive Shiny app designed to explore global video game sales from 1971 to 2024. This dashboard allows users to visualize trends in game sales by genre, platform, publisher, and region.
 
@@ -16,6 +16,11 @@ An interactive Shiny app designed to explore global video game sales from 1971 t
       - *Top publishers*: User will see a generated race chart of the publishers that launched more videogames for the current year.
         
   - **Map**: Generated world map that shows all sales recorded regionally until 2024.
+
+## 🌐 Web page
+
+You can explore this data visualization without any installation [here]( https://soniaremacha.shinyapps.io/Videogame_Sales_2024/).
+
 
 ## 🧰 Built With
 
