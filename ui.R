@@ -112,15 +112,6 @@ ui <- navbarPage("Videogame Sales 2024",
                  
         ), # End tabPanel 4
   
-        # -------------------------------------------------------------------------------------------------------------------------------------
-        # Tab 5
-        tabPanel("Mapa ventas", 
-                 h1("Mapa de ventas globales hasta 2024"),
-                 plotOutput("sales_map", height = "600px")
-                 
-        ), # End tabPanel 5
-        
-        
       ) # End tabsetPanel -Visualizaciones interactivas-
       
     ) # End mainPanel -Visualizaciones interactivas-
@@ -134,6 +125,7 @@ ui <- navbarPage("Videogame Sales 2024",
   tabPanel("Visualizaciones animadas",
     mainPanel(
       tabsetPanel(
+        
         # -------------------------------------------------------------------------------------------------------------------------------------
         # Tab 1
         tabPanel("KPI ventas",
@@ -151,6 +143,7 @@ ui <- navbarPage("Videogame Sales 2024",
             tags$h2(textOutput("totalVentasTexto"), style = "color: #2c3e50; font-weight: bold;")
                  
         ), # End tabPanel 1
+        
         # -------------------------------------------------------------------------------------------------------------------------------------
         # Tab 2
         tabPanel("Top publishers",
@@ -166,6 +159,13 @@ ui <- navbarPage("Videogame Sales 2024",
 
   ), # End Tabpanel -Visualizaciones animadas-
   
+  #############################################################################################################################################  
+  # -Mapa-
+
+  tabPanel("Mapa", 
+           h1("Mapa de ventas globales hasta 2024"),
+           imageOutput("sales_map_image")
+  ), # End tabPanel -Mapa-
   
   ############################################################################################################################################# 
   # Footer
@@ -177,3 +177,4 @@ ui <- navbarPage("Videogame Sales 2024",
   ) # End Footer
 
 ) # End navbarPage
+

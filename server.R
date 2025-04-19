@@ -225,74 +225,6 @@ function(input, output, session) {
       theme(axis.text.x = element_text(angle = 45, hjust = 1))
   })
   
-  # -------------------------------------------------------------------------------------------------------------------------------------
-  # Tab 5: Mapa ventas
-  
-  # Generar mundo.rds
-  #world <- ne_countries(scale = "medium", returnclass = "sf")
-  #saveRDS(world, file = "Videogame_sales_2024/mundo.rds")
-  
-  
-  # Establecer world
-  world <- readRDS(file = "mundo.rds")
-  
-  
-  # Establecer ventas totales por cada región
-  jp_total <- sum(data$jp_sales, na.rm = TRUE)
-  pal_total <- sum(data$pal_sales, na.rm = TRUE)
-  na_total <- sum(data$na_sales, na.rm = TRUE)
-  other_total <- sum(data$other_sales, na.rm = TRUE)
-  
-  # Añadir esas ventas a los países correspondientes de world en una nueva columna total_sales
-  world <- world %>%
-    mutate(
-      total_sales = case_when(
-        name == "Japan" 
-        ~ jp_total,
-        name %in% c("Mexico", "United States of America", "Canada") 
-        ~ na_total,
-        name %in% c("Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czechia",
-                    "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", 
-                    "Hungary", "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", 
-                    "Malta", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", 
-                    "Slovenia", "Spain")  
-        ~ pal_total,
-        
-        TRUE 
-        ~ other_total 
-      )
-    )
-  
-  
-  # Gráfico mapa
-  world$total_sales <- round(world$total_sales, 2)
-  world$total_sales <- as.factor(world$total_sales)
-  
-  output$sales_map <- renderPlot({
-    ggplot(data = world) +
-      geom_sf(aes(fill = total_sales), color = "black", size = 0.2) +
-      scale_fill_manual(
-        values = c(
-          "687.94" = "#e60052",    
-          "3345.52" = "#dca100",   
-          "651.12" = "grey90",    
-          "1916.83" = "#00315e"    
-        ),
-        name = "Histórico ventas",
-        labels = c(
-          "651.12" = "Other: 651.12",
-          "3345.52" = "North America: 3345.52",
-          "687.94" = "Japan: 687.94",
-          "1916.83" = "Europe: 1916.83"
-        ) 
-      ) +
-      theme_minimal() +
-      theme(
-        legend.position = "right",
-        panel.grid = element_blank()
-      )
-    
-  }) # End Sales map
   
   
   
@@ -379,6 +311,92 @@ function(input, output, session) {
   }, deleteFile = FALSE)
   
   
+  #############################################################################################################################################
+  # -Mapa-
+  
+  # Generar mundo.rds
+  #world <- ne_countries(scale = "medium", returnclass = "sf")
+  #saveRDS(world, file = "mundo.rds")
+  
+  
+  # Establecer world
+  world <- readRDS(file = "mundo.rds")
+  
+  
+  # Establecer ventas totales por cada región
+  jp_total <- sum(data$jp_sales, na.rm = TRUE)
+  pal_total <- sum(data$pal_sales, na.rm = TRUE)
+  na_total <- sum(data$na_sales, na.rm = TRUE)
+  other_total <- sum(data$other_sales, na.rm = TRUE)
+  
+  # Añadir esas ventas a los países correspondientes de world en una nueva columna total_sales
+  world <- world %>%
+    mutate(
+      total_sales = case_when(
+        name == "Japan" 
+        ~ jp_total,
+        name %in% c("Mexico", "United States of America", "Canada") 
+        ~ na_total,
+        name %in% c("Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czechia",
+                    "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", 
+                    "Hungary", "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", 
+                    "Malta", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", 
+                    "Slovenia", "Spain")  
+        ~ pal_total,
+        
+        TRUE 
+        ~ other_total 
+      ),
+      total_sales = round(total_sales, 2),
+      total_sales = as.factor(total_sales),
+      total_sales = factor(
+        total_sales,
+        levels = c("687.94", "3345.52", "651.12", "1916.83")
+      )
+      
+    ) 
+  
+  
+  # Gráfico mapa
+  png("mi_grafico.png", width = 1080, height = 734) 
+  
+  sales_map_plot <- ggplot(data = world) +
+    geom_sf(aes(fill = total_sales), color = "black", size = 0.2) +
+    scale_fill_manual(
+      values = c(
+        "687.94" = "#e60052",    
+        "3345.52" = "#dca100",   
+        "651.12" = "grey90",    
+        "1916.83" = "#00315e"    
+      ),
+      name = "Histórico ventas",
+      labels = c(
+        
+        "687.94" = "Japan: 687.94",
+        "3345.52" = "North America: 3345.52",
+        "651.12" = "Other: 651.12",
+        "1916.83" = "Europe: 1916.83"
+      ) ,
+      drop = FALSE
+    ) +
+    theme_minimal() +
+    theme(
+      legend.position = "right",
+      panel.grid = element_blank()
+    )
+  
+  dev.off()
+  
+  output$sales_map_image <- renderImage({
+    list(
+      src = "sales_map.png",  
+      contentType = "image/png",
+      width = 1080,
+      height = 734,
+      alt = "Mapa de ventas"
+    )
+  }, deleteFile = FALSE)  # No eliminar la imagen después de mostrarla
+  
   
   
   # -------------------------------------------------------------------------------------------------------------------------------------
@@ -391,3 +409,4 @@ function(input, output, session) {
   
   
 }
+
