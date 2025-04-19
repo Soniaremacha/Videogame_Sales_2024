@@ -112,6 +112,13 @@ ui <- navbarPage("Videogame Sales 2024",
                  
         ), # End tabPanel 4
   
+        # -------------------------------------------------------------------------------------------------------------------------------------
+        # Tab 5
+        tabPanel("Mapa ventas", 
+                 h1("Mapa de ventas globales hasta 2024"),
+                 plotOutput("sales_map", height = "600px")
+                 
+        ), # End tabPanel 5
         
         
       ) # End tabsetPanel -Visualizaciones interactivas-
@@ -152,22 +159,6 @@ ui <- navbarPage("Videogame Sales 2024",
                      imageOutput("publisher_race_chart")
                    )
         ),  # End tabPanel 2
-        
-        
-
-        # -------------------------------------------------------------------------------------------------------------------------------------
-        # Tab 3
-        tabPanel("Visualización animada 3",
-                 h1("Visualización animada 3"),
-                     
-                     
-                     
-                     
-                     
-                     
-                     
-        ) # End tabPanel 3
-            
         
       ) # End TabsetPanel -Visualizaciones animadas-
              
