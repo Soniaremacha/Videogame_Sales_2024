@@ -29,12 +29,19 @@ An interactive Shiny app designed to explore global video game sales from 1971 t
 
 Videogame_Sales_2024/
 ├── server.R                # Shiny app server
+
 ├── ui.R                    # Shiny app ui
+
 ├── www/                    # Gif generated
+
 │   └── race_chart.gif      
+
 ├── mundo.rds               # File generated from Natural Earth library for the world map
+
 ├── sales_map.png           # Image generated
+
 └── README.md               # This file
+
 
 ## 📊 Dataset
 
